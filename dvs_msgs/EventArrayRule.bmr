@@ -50,7 +50,7 @@ MSG: dvs_msgs/Event
 # A DVS event
 uint16 x
 uint16 y
-time ts
+uint32 ts
 bool polarity
 """
 
@@ -81,7 +81,7 @@ bool polarity
 # A DVS event
 uint16 x
 uint16 y
-time ts
+uint32 ts
 bool polarity
 """
 

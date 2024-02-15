@@ -1,34 +1,41 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.5)
 project(dvs_msgs)
 
-# search for everything we need to build the messages, dont forget the message_generation
-find_package(catkin REQUIRED COMPONENTS
-  message_generation
-  std_msgs
+# Find dependencies
+find_package(ament_cmake REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(std_msgs REQUIRED)
+find_package(rosidl_default_generators REQUIRED)
+
+find_package(ament_cmake REQUIRED)
+find_package(builtin_interfaces REQUIRED)
+
+# Declare the message files
+set(msg_files
+    "msg/Event.msg"
+    "msg/EventArray.msg"
+    # Add more message files as needed
 )
 
-# search for all msg files
-FILE(GLOB messages_to_build RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/msg"
-    "${CMAKE_CURRENT_SOURCE_DIR}/msg/*.msg")
-
-# notify catkin to look at the previously found msg files
-add_message_files(
-  FILES
-  ${messages_to_build}
+# Generate messages
+rosidl_generate_interfaces(${PROJECT_NAME}
+  ${msg_files}
+  DEPENDENCIES std_msgs
 )
 
-# build the header files from the msg files, and notify catkin about the dependencies
-generate_messages(
-  DEPENDENCIES
-  std_msgs
-)
+if(BUILD_TESTING)
+  find_package(ament_lint_auto REQUIRED)
+  # the following line skips the linter which checks for copyrights
+  # comment the line when a copyright and license is added to all source files
+  set(ament_cmake_copyright_FOUND TRUE)
+  # the following line skips cpplint (only works in a git repo)
+  # comment the line when this package is in a git repo and when
+  # a copyright and license is added to all source files
+  set(ament_cmake_cpplint_FOUND TRUE)
+  ament_lint_auto_find_test_dependencies()
+endif()
 
-# export the dependencis of this package for who ever depends on us
-catkin_package(
-  CATKIN_DEPENDS message_runtime std_msgs
-)
+ament_export_dependencies(rosidl_default_runtime)
 
-include_directories(
-  ${catkin_INCLUDE_DIRS}
-)
 
+ament_package()
